@@ -1,0 +1,53 @@
+
+
+CREATE TABLE `hy_sql`.`owner` (
+  `owner_id` INT NOT NULL,
+  `owner_name` VARCHAR(45) NULL);
+  
+
+
+CREATE TABLE `hy_sql`.`catergory` (
+  `catergory_id` INT NOT NULL,
+  `catergory__title` VARCHAR(45) NULL,
+  `catergory_description` VARCHAR(45) NULL);
+
+CREATE TABLE `hy_sql`.`article` (
+  `article_id` INT NOT NULL,
+  `article_title` VARCHAR(45) NULL,
+  `article_content` VARCHAR(45) NULL,
+  `owner_id` VARCHAR(45) NULL);
+
+
+
+
+CREATE TABLE `hy_sql`.`category_article_mapping` (
+  `category_id` INT NOT NULL,
+  `article_id` VARCHAR(45) NULL);
+  
+
+
+ALTER TABLE `hy_sql`.`article` 
+ADD PRIMARY KEY (`article_id`);
+;
+ALTER TABLE `hy_sql`.`category` 
+ADD PRIMARY KEY (`category_id`);
+;
+
+ALTER TABLE `hy_sql`.`owner` 
+ADD PRIMARY KEY (`owner_id`);
+;
+
+
+SELECT 
+    owner.owner_id,
+    owner.owner_name,
+    COUNT(DISTINCT category.category_id) AS category_count
+FROM 
+    article
+    INNER JOIN owner ON article.owner_id = owner.owner_id
+    INNER JOIN category_article_mapping ON article.article_id = category_article_mapping.article_id
+    INNER JOIN category ON category_article_mapping.category_id = category.category_id
+GROUP BY 
+    owner.owner_id
+ORDER BY 
+    category_count DESC;  
